@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">MusicLite</string>
 
-    <string name="hello_world">Hello world!</string>
+
     <string name="action_settings">Settings</string>
+    <string name="play_list">Play List</string>
+    <string name="create_playlist">Create Playlist</string>
+    <string name="clear">Clear</string>
+    <string name="song_info">Song Information</string>
+
 </resources>

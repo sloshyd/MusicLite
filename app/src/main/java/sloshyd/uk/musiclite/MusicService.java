@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentUris;
 import android.content.Intent;
+
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -45,6 +46,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private boolean isPaused = false;
     private String songName;
     private String songArtist;
+    private long albumId;
+
 
     @Override
     public void onCreate() {
@@ -56,6 +59,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         initPlayer();
 
     }
+
+
 
     public void initPlayer(){
         player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
@@ -111,17 +116,17 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     }
 
-    private void broadcastSongDetails(Intent intent){
+    public void broadcastSongDetails(Intent intent){
         //gets song information and broadcasts it
         songName = songs.get(songPosition).getTitle();
         songArtist = songs.get(songPosition).getArtist();
+        albumId = songs.get(songPosition).getAlbumId();
         intent.putExtra("songName", songName);
         intent.putExtra("songArtist", songArtist);
+        intent.putExtra("albumId", albumId );
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
     }
-
-
 
     @Override
     public void onCompletion(MediaPlayer mp) {
@@ -138,8 +143,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mp.start();
 
     }
-
-
 
     public void setList(ArrayList<Song> theSongs){
         songs=theSongs;
@@ -178,7 +181,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void onDestroy() {
         stopForeground(true);
 
+        Log.i(LOGTAG, "onDestroy() called");
+
     }
+
+
+
 
 
     public String currentSongName(){
